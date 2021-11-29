@@ -7,17 +7,35 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.test.assertFalse
+
 
 class AppTest {
 
     @Test fun cubeRotationsAreInvariant() {
         val cube = Cube()
-        val identityRotations = arrayOf("FFFF", "UUUU", "LLLL", "FFFF", "BBBB", "DDDD", "RRRR")
+        val identityRotations = arrayOf("FFFF", "ffff", "UUUU", "uuuu", "LLLL", "llll",
+                "BBBB", "bbbb", "DDDD", "dddd", "RRRR", "rrrr")
         for(rot in identityRotations) {
             for (c in rot.toCharArray()) {
                 cube.rotate(c)
             }
             assertTrue(cube.isIdentical(Cube()))
         }
+    }
+
+    @Test fun createIdentityIsSolved() {
+        assertTrue(Cube.isSolved(Cube.identity()))
+    }
+
+    @Test fun createFromStringIsNotSolved() {
+        val input = arrayOf(
+            "RGBYWORGB",
+            "YWORGBYWO",
+            "RGBYWORGB",
+            "YWORGBYWO",
+            "RGBYWORGB",
+            "YWORGBYWO")
+        assertFalse(Cube.isSolved( Cube.fromStringArray(input)))
     }
 }

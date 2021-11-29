@@ -219,11 +219,17 @@ class Cube () {
     fun rotate(how: Char){
         when(how) {
             'F' -> rotateF()
+            'f' -> {rotateF(); rotateF(); rotateF()}
             'U' -> rotateU()
+            'u' -> {rotateU(); rotateU(); rotateU()}
             'B' -> rotateB()
+            'b' -> {rotateB(); rotateB(); rotateB()}
             'R' -> rotateR()
+            'r' -> {rotateR(); rotateR(); rotateR()}
             'L' -> rotateL()
+            'l' -> {rotateL(); rotateL(); rotateL()}
             'D' -> rotateD()
+            'd' -> {rotateD(); rotateD(); rotateD()}
             else -> throw IllegalArgumentException("Use one of UFBRLD")
         }
     }
@@ -301,6 +307,28 @@ class Cube () {
 
 
     */
+    companion object CC {
+        fun fromStringArray(str: Array<String>) : Cube {
+            val c = Cube()
+            for(i in c.labels.indices){
+                str[i].toCharArray().copyInto(c.cube[i])
+            }
+            return c
+        }
+
+        fun identity() : Cube {
+            return Cube()
+        }
+
+        fun isSolved(c:Cube): Boolean {
+            // For each face, the result should be equal
+            for( it in c.cube.iterator()){
+                if (it.groupBy {it}.size != 1)
+                    return false
+            }
+            return true
+        }
+    }
 }
 
 
