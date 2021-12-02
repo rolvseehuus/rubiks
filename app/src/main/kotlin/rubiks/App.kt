@@ -1,7 +1,7 @@
 package rubiks
 
 
-class Cube () {
+class Cube : Cloneable {
     private val cube = Array<CharArray>(6) { CharArray(9)}
     private val labels: CharArray = "UFBRLD".toCharArray()
 
@@ -17,6 +17,14 @@ class Cube () {
         for (i in 0 until 6)
             for (j in 0 until 9)
                 cube[i][j] = "WOYBGR".toCharArray()[i]
+    }
+
+    public override fun clone() : Cube {
+        val c = Cube()
+        for (i in 0 until 6)
+            for (j in 0 until 9)
+                c.cube[i][j] = cube[i][j]
+        return c
     }
 
     fun rotateF(){
@@ -216,7 +224,7 @@ class Cube () {
         }
     }
 
-    fun rotate(how: Char){
+    fun rotate(how: Char): Cube {
         when(how) {
             'F' -> rotateF()
             'f' -> {rotateF(); rotateF(); rotateF()}
@@ -232,6 +240,12 @@ class Cube () {
             'd' -> {rotateD(); rotateD(); rotateD()}
             else -> throw IllegalArgumentException("Use one of UFBRLD")
         }
+        return this
+    }
+
+    fun transform(steps: CharArray): Cube {
+        for(i in steps) rotate(i)
+        return this;
     }
 
     fun isIdentical(other: Cube): Boolean {
@@ -241,13 +255,6 @@ class Cube () {
                     return false
         }
         return true
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if( other is Cube )
-            return isIdentical(other)
-
-        return false
     }
 
     /*
@@ -308,6 +315,7 @@ class Cube () {
 
     */
     companion object CC {
+        // Creators
         fun fromStringArray(str: Array<String>) : Cube {
             val c = Cube()
             for(i in c.labels.indices){
@@ -320,6 +328,7 @@ class Cube () {
             return Cube()
         }
 
+        // Tests
         fun isSolved(c:Cube): Boolean {
             // For each face, the result should be equal
             for( it in c.cube.iterator()){
@@ -328,10 +337,14 @@ class Cube () {
             }
             return true
         }
+
+        // Evaluation
+        fun scoreFaces(c:Cube) : Int {
+            return c.cube.fold(0)
+                {a, f -> f.fold(a) { a, vr -> a + if (vr==f[4]) 1 else 0 } }
+        }
     }
 }
-
-
 
 class App {
     val greeting: String

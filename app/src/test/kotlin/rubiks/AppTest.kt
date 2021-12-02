@@ -38,4 +38,8 @@ class AppTest {
             "YWORGBYWO")
         assertFalse(Cube.isSolved( Cube.fromStringArray(input)))
     }
+
+    @Test fun testIdentityCubeScore() {
+        assertTrue(Cube.scoreFaces(Cube.identity()) == 54)
+    }
 }
